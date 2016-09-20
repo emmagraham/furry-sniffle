@@ -1,0 +1,43 @@
+---
+title: "RMarkdown Gapminder exploration"
+author: "Emma Graham"
+date: "September 19, 2016"
+output: 
+  html_document:
+    keep_md: yes
+---
+
+This is an R Markdown file that attempts to explore the Gapminder data.
+First, let's install the package and inport it into R
+
+Let's load the gapminder data and look at the first few rows and columns of the data
+```{r}
+library(gapminder)
+head(gapminder)
+```
+
+Let's make a histogram of the life expectancy of all people included in the dataset. 
+
+```{r}
+hist(gapminder$lifeExp)
+```
+
+Let's look at how many individuals are from each continent
+
+```{r}
+summary(gapminder$continent)
+```
+
+Let's make a plot using ggplot2 that shows the relationship between country GDP and life expectancy. This was taken from Jenny Bryan's "care feeding data into R" html file on stat545.com
+
+```{r}
+library(ggplot2)
+p <- ggplot(subset(gapminder, continent != "Oceania"),
+            aes(x = gdpPercap, y = lifeExp))
+p <- p + scale_x_log10() # log the x axis the right way
+p + geom_point() # scatterplot
+p + geom_point(aes(color = continent)) # map continent to color
+p + geom_point(alpha = (1/3), size = 3) + geom_smooth(lwd = 3, se = FALSE)
+p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
+  geom_smooth(lwd = 1.5, se = FALSE)
+```
